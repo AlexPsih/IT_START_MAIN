@@ -5,7 +5,7 @@ using UnityEngine;
 public class GravityAttractor : MonoBehaviour
 {
     [Header("Настройки Гравитации")]
-    [SerializeField] private float gravityForce = 9.8f; 
+    [SerializeField] private float gravityForce = 19.8f; 
     [SerializeField] private float attractionRadius = 10f; 
     [SerializeField] private bool inverseSquareLaw = true; 
 

@@ -18,7 +18,7 @@ public class RocketController : MonoBehaviour
 
     private Rigidbody rb;
     private float currentFuel;
-    private int isThrusting = 0;
+    private bool isThrusting = false;
 
     private void Awake()
     {
@@ -32,6 +32,7 @@ public class RocketController : MonoBehaviour
     private void Update()
     {
         HandleInput();
+        UpdateFuel();
         ClampVelocity();
     }
 
@@ -42,19 +43,12 @@ public class RocketController : MonoBehaviour
         transform.Rotate(Vector3.forward * -rotationInput * rotationSpeed * Time.deltaTime);
 
         // “€га
-        if (Input.GetKey(KeyCode.W))
-        {
-            isThrusting = 1;
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            isThrusting = -1;
-        }
+        isThrusting = Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.UpArrow);
 
         // ¬ключение/выключение эффектов т€ги
         if (thrustParticles != null)
         {
-            if (isThrusting==0 && currentFuel > 0)
+            if (isThrusting && currentFuel > 0)
             {
                 if (!thrustParticles.isPlaying)
                     thrustParticles.Play();
@@ -69,14 +63,26 @@ public class RocketController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (isThrusting!=0 && currentFuel > 0)
+        if (isThrusting && currentFuel > 0)
         {
             // ѕримен€ем силу в направлении "вверх" ракеты
             rb.AddForce(transform.up * thrustForce * Time.fixedDeltaTime);
         }
     }
 
+    private void UpdateFuel()
+    {
+        if (isThrusting)
+        {
+            currentFuel -= fuelConsumptionRate * Time.deltaTime;
+            currentFuel = Mathf.Clamp(currentFuel, 0f, maxFuel);
 
+            if (currentFuel <= 0)
+            {
+                isThrusting = false;
+            }
+        }
+    }
 
     private void ClampVelocity()
     {
