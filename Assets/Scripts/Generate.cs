@@ -11,7 +11,7 @@ public class Generate : MonoBehaviour
     {
         for (int i=0; i< counts; i++)
         {
-            Instantiate(planets[Random.RandomRange(0,planets.Length)], new Vector3(Random.RandomRange(-range, range), Random.RandomRange(-range, range), Random.RandomRange(-range, range)*0.1f), Quaternion.identity);
+            Instantiate(planets[Random.RandomRange(0,planets.Length)], new Vector3(Random.RandomRange(-range, range), Random.RandomRange(-range, range), Random.RandomRange(-range, range)*0f), Quaternion.identity);
         }
     }
 
