@@ -48,9 +48,9 @@ public class RocketController : MonoBehaviour
         // Включение/выключение эффектов тяги
         if (thrustParticles != null)
         {
-            if (isThrusting && currentFuel > 0)
+            if (isThrusting)
             {
-                if (!thrustParticles.isPlaying)
+                //if (!thrustParticles.isPlaying)
                     thrustParticles.Play();
             }
             else
