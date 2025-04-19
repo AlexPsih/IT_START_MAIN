@@ -14,6 +14,10 @@ using UnityEngine.UI;
     using System.Net;
 #endif
 
+interface IInteract
+{
+    public void Interact();
+}
 public class FirstPersonController : MonoBehaviour
 {
     private Rigidbody rb;
@@ -362,6 +366,34 @@ public class FirstPersonController : MonoBehaviour
         {
             HeadBob();
         }
+
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            RayCast();
+        }
+
+
+    }
+
+
+    public void RayCast()
+    {
+        Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
+
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit))
+        {
+            print(hit.collider.name);
+            if (hit.collider.TryGetComponent(out IInteract interact))
+            {
+                interact.Interact();
+            }
+        }
+
+
+
+        Debug.DrawRay(playerCamera.transform.position, playerCamera.transform.forward * 10, Color.red);
     }
 
     void FixedUpdate()

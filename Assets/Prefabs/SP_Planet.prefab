@@ -102,7 +102,7 @@ MonoBehaviour:
   gravityForce: 13.05
   attractionRadius: 69.3
   inverseSquareLaw: 1
-  showGizmo: 1
+  showGizmo: 0
   gizmoColor: {r: 0, g: 1, b: 1, a: 0.23529412}
 --- !u!54 &5638696763278682824
 Rigidbody:

@@ -16,6 +16,10 @@ public class RocketController : MonoBehaviour
     [Header("Effects")]
     [SerializeField] private ParticleSystem thrustParticles;
 
+    public AudioClip[] dialogs;
+    public AudioSource dialogsAU;
+    float timedialog;
+
     private Rigidbody rb;
     private float currentFuel;
     private bool isThrusting = false;
@@ -34,6 +38,14 @@ public class RocketController : MonoBehaviour
         HandleInput();
         UpdateFuel();
         ClampVelocity();
+
+        timedialog -= 0.01f;
+        if (timedialog<0)
+        {
+            timedialog = 5;
+            dialogsAU.clip = dialogs[Random.RandomRange(0,dialogs.Length)];
+            dialogsAU.Play();
+        }
     }
 
     private void HandleInput()

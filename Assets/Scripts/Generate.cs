@@ -9,7 +9,7 @@ public class Generate : MonoBehaviour
     public GameObject[] planets;
     public GameObject meteor;
     private Transform player;
-    float timer_mateor=1;
+    float timer_mateor=5;
     void Start()
     {
         player = GameObject.Find("player").GetComponent<Transform>();

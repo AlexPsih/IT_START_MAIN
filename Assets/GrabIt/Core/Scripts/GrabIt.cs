@@ -47,6 +47,8 @@ public class GrabIt : MonoBehaviour {
 	[Range(10,50)]
 	float m_impulseMagnitude = 25;
 
+		public GameObject menu;
+
 
 	
 
@@ -65,6 +67,7 @@ public class GrabIt : MonoBehaviour {
 	Transform m_transform;	
 
 	Vector3 m_targetPos;
+	GameObject m_targetGO;
 	GameObject m_hitPointObject;
 	float m_targetDistance;
 
@@ -95,6 +98,7 @@ public class GrabIt : MonoBehaviour {
 			m_targetDistance = Mathf.Clamp(m_targetDistance , m_grabMinDistance , m_grabMaxDistance);
 
 			m_targetPos = m_transform.position + m_transform.forward * m_targetDistance;
+			//m_targetGO = 
 						
 			if(!m_isHingeJoint){
 				if(Input.GetKey(m_rotatePitchPosKey) || Input.GetKey(m_rotatePitchNegKey) || Input.GetKey(m_rotateYawPosKey) || Input.GetKey(m_rotateYawNegKey)){
@@ -112,7 +116,9 @@ public class GrabIt : MonoBehaviour {
 				m_applyImpulse = true;
 			}
 
-			
+				print(m_hitPointObject.name);
+
+
 		}
 		else
 		{
