@@ -659,6 +659,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   exploison: {fileID: 100008, guid: 1ae4db7b36e51124b89d2b32303a7a0b, type: 3}
   strenght: 3
+  camera: {fileID: 963194227}
 --- !u!1 &458518425
 GameObject:
   m_ObjectHideFlags: 0
@@ -6105,7 +6106,7 @@ Camera:
   far clip plane: 1001.42
   field of view: 60
   orthographic: 1
-  orthographic size: 36.21
+  orthographic size: 27.71
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
