@@ -11,7 +11,7 @@ public class MissionRealTime : MonoBehaviour
     public int Mission_type;
     void Start()
     {
-        
+        Mission_type = PlayerPrefs.GetInt("mission",0);
     }
 
     // Update is called once per frame
