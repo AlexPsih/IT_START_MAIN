@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2154,9 +2154,9 @@ GameObject:
   - component: {fileID: 411400843}
   - component: {fileID: 411400842}
   m_Layer: 0
-  m_Name: box (1)
+  m_Name: POGRUZKA
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -5488,9 +5488,9 @@ GameObject:
   - component: {fileID: 1095591901}
   - component: {fileID: 1095591900}
   m_Layer: 0
-  m_Name: box
+  m_Name: SKLAD
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -5535,7 +5535,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9e7fd5fd4fd2a364687826673b92351f, type: 2}
+  - {fileID: 2100000, guid: ac2c81eae0afbb843b8d079239c551ed, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5574,8 +5574,8 @@ Transform:
   m_GameObject: {fileID: 1095591899}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 7.38, y: -4.55, z: 0.3}
-  m_LocalScale: {x: 11.571, y: 0.71131885, z: 28}
+  m_LocalPosition: {x: 17.5, y: -4.55, z: 0.3}
+  m_LocalScale: {x: 32.64642, y: 0.71131885, z: 28}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1339157515}
