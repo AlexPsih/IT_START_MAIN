@@ -27,10 +27,11 @@ public class AIRocket : MonoBehaviour
 
     void Update()
     {
+        target = GameObject.Find("player").GetComponent<Transform>().transform;
         if (target == null) return;
 
         // Check distance to activate
-        if (!isActive && Vector3.Distance(transform.position, target.position) < activationDistance)
+        if (!isActive)
         {
             isActive = true;
             if (engineParticles != null) engineParticles.Play();

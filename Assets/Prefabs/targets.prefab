@@ -860,6 +860,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ac8536ad6d2e344eb83a440365e3788, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  range: 0
   planet:
   - {fileID: 2243310774780696457}
   - {fileID: 8716387163829469489}
