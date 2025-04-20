@@ -14,4 +14,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MOON.unity
     guid: cb68ca989fef0974a905412ffe9e1e31
+  - enabled: 1
+    path: Assets/Scenes/SATRUN2.unity
+    guid: 40ad515d06a7d45438f0439e96768658
+  - enabled: 1
+    path: Assets/Scenes/SATURN.unity
+    guid: bf8dbf01bbcb6e54fa8242818e73be91
+  - enabled: 1
+    path: Assets/Scenes/COLDPLANET.unity
+    guid: 11b249026d771c44f93a7818e76b349b
   m_configObjects: {}

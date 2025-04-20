@@ -24,7 +24,22 @@ public class TargetPlanetScript : MonoBehaviour
     {
         if (other.name=="player")
         {
-            SceneManager.LoadScene(2);
+            if (planetid==0)
+            {
+                SceneManager.LoadScene(4);
+            }
+            if (planetid == 1)
+            {
+                SceneManager.LoadScene(5);
+            }
+            if (planetid == 2)
+            {
+                SceneManager.LoadScene(3);
+            }
+            if (planetid == 3)
+            {
+                SceneManager.LoadScene(2);
+            }
         }
     }
 }

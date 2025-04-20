@@ -9,7 +9,7 @@ public class BuyButton : MonoBehaviour, IInteract
     {
         if (panel.page == 0)
         {
-            PlayerPrefs.SetInt("Sheild", PlayerPrefs.GetInt("Sheild", -1)+1);
+            PlayerPrefs.SetInt("Sheild", PlayerPrefs.GetInt("Sheild", 0)+1);
         }
         else if (panel.page == 1)
         {
