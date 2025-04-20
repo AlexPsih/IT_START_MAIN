@@ -1171,7 +1171,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   thrustForce: 1878.9
-  rotationSpeed: 235.8
+  rotationSpeed: 50
   maxVelocity: 50
   maxFuel: 2611
   fuelConsumptionRate: 5

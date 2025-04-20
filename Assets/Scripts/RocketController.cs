@@ -31,6 +31,8 @@ public class RocketController : MonoBehaviour
 
         if (thrustParticles != null)
             thrustParticles.Stop();
+
+        rotationSpeed = PlayerPrefs.GetInt("manevr", 50);
     }
 
     private void Update()

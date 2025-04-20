@@ -53,6 +53,8 @@ public class TriggerHUBDoor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        mestomax = PlayerPrefs.GetInt("gruz",2); 
+
         mestotext.text =mesto.ToString()+"/"+mestomax.ToString();
     }
 }
