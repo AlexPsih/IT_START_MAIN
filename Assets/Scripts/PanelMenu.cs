@@ -11,29 +11,29 @@ public class PanelMenu : MonoBehaviour
     public TextMeshPro price;
     void Start()
     {
-        price;
+        
     }
 
     
     void Update()
     {
-        if (page==0 && PlayerPrefs.GetInt("Sheild", 1) < 10)
+        if (page==0)
         {
             named.text = "Щит";
-            howmany.text = PlayerPrefs.GetInt("Sheild",0).ToString()+ "/7";
-            price.text = "1000$";
+            howmany.text = PlayerPrefs.GetInt("Sheild",-1).ToString()+ "/7";
+            price.text = "100$";
         }
-        else if (page == 1 && PlayerPrefs.GetInt("manevr", 1) < 5)
+        else if (page == 1)
         {
             named.text = "Манёвривость";
-            howmany.text = (PlayerPrefs.GetInt("manevr", 50)/50).ToString() + "/5";
-            price.text = "500$";
+            howmany.text = (PlayerPrefs.GetInt("manevr", -1)/50).ToString() + "/7";
+            price.text = "1000$";
         }
-        else if (page == 2 && PlayerPrefs.GetInt("gruz", 1)<5)
+        else if (page == 2)
         {
             named.text = "Грузовой отсек";
-            howmany.text = PlayerPrefs.GetInt("gruz", 1).ToString() + "/5";
-            price.text = "1500$";
+            howmany.text = PlayerPrefs.GetInt("gruz", -1).ToString() + "/7";
+            price.text = "300$";
         }
     }
 }
