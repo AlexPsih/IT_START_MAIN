@@ -8,108 +8,65 @@ public class TriggerHUBDoor : MonoBehaviour
 {
     public bool Sklad;
     public int mesto;
-    public int mestomax = 2; // –£—Å—Ç–∞–Ω–∞–≤–ª–∏–≤–∞–µ–º 2 –ø–æ —É–º–æ–ª—á–∞–Ω–∏—é, –∫–∞–∫ –≤ PlayerPrefs
+    public int mestomax=1;
     public TextMeshPro mestotext;
-
     void Start()
     {
-        // –û—á–∏—â–∞–µ–º cargoList –ø—Ä–∏ —Å—Ç–∞—Ä—Ç–µ
-        PlayerPrefs.SetString("cargoList", "");
-        PlayerPrefs.Save();
-        // –õ–æ–≥–∏—Ä—É–µ–º –Ω–∞—á–∞–ª—å–Ω–æ–µ –∑–Ω–∞—á–µ–Ω–∏–µ mestomax
-        mestomax = PlayerPrefs.GetInt("gruz", mestomax);
-        Debug.Log($"Initial mestomax: {mestomax}");
+        
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other == null) return;
-
         if (Sklad && mesto < mestomax)
         {
-            Debug.Log($"Trigger entered by {other.name}, mesto = {mesto}, mestomax = {mestomax}");
-
-            // –ü–æ–ª—É—á–∞–µ–º —Ç–µ–∫—É—â–∏–π —Å–ø–∏—Å–æ–∫ –≥—Ä—É–∑–æ–≤
+            mesto += 1;
+            // œÓÎÛ˜‡ÂÏ ÚÂÍÛ˘ËÈ ÒÔËÒÓÍ „ÛÁÓ‚ ËÁ PlayerPrefs ËÎË ÒÓÁ‰‡ÂÏ ÔÛÒÚÓÈ
             string cargoList = PlayerPrefs.GetString("cargoList", "");
+            // ”·Ë‡ÂÏ ÒÛÙÙËÍÒ (Clone) ËÁ ËÏÂÌË Ó·˙ÂÍÚ‡
             string cargoName = other.name.Replace("(Clone)", "");
 
-            // –û–±—Ä–∞–±–∞—Ç—ã–≤–∞–µ–º –æ–±—ä–µ–∫—Ç
-            bool isValidObject = false;
             if (other.name == "barrel_3_2(Clone)")
             {
                 PlayerPrefs.SetInt("mission", 0);
-                Debug.Log("–ú–∏—Å—Å–∏—è –Ω–∞ –≤—Ä–µ–º—è");
-                isValidObject = true;
+                print("ÃËÒÒËˇ Ì‡ ‚ÂÏˇ");
+                cargoList += (cargoList == "" ? "" : ",") + cargoName;
+                GameObject.Destroy(other.gameObject);
             }
-            else if (other.name == "barrel_3_1(Clone)")
+            if (other.name == "barrel_3_1(Clone)")
             {
                 PlayerPrefs.SetInt("mission", 1);
-                Debug.Log("–ú–∏—Å—Å–∏—è —Å –ø–∏—Ä–∞—Ç–∞–º–∏");
-                isValidObject = true;
+                print("ÃËÒÒËˇ Ò ÔË‡Ú‡ÏË");
+                cargoList += (cargoList == "" ? "" : ",") + cargoName;
+                GameObject.Destroy(other.gameObject);
             }
-            else if (other.name == "barrel_1(Clone)")
+            if (other.name == "barrel_1(Clone)")
             {
                 PlayerPrefs.SetInt("mission", 2);
-                Debug.Log("–ú–∏—Å—Å–∏—è –Ω–∞ –≤—Ä–µ–º—è");
-                isValidObject = true;
+                cargoList += (cargoList == "" ? "" : ",") + cargoName;
+                GameObject.Destroy(other.gameObject);
             }
-            else if (other.name == "barrel_2(Clone)")
+            if (other.name == "barrel_2(Clone)")
             {
                 PlayerPrefs.SetInt("mission", 3);
-                Debug.Log("–ú–∏—Å—Å–∏—è —Å –ø–∏—Ä–∞—Ç–∞–º–∏");
-                isValidObject = true;
-            }
-            else if (other.name == "post_box(Clone)")
-            {
-                Debug.Log("post_box added to cargoList");
-                isValidObject = true;
-            }
-            else
-            {
-                Debug.LogWarning($"Unknown object {other.name} entered trigger");
-                return; // –ù–µ –∑–∞—Å—á–∏—Ç—ã–≤–∞–µ–º –Ω–µ–∏–∑–≤–µ—Å—Ç–Ω—ã–µ –æ–±—ä–µ–∫—Ç—ã
-            }
-
-            if (isValidObject)
-            {
-                // –£–≤–µ–ª–∏—á–∏–≤–∞–µ–º mesto
-                mesto += 1;
-                // –î–æ–±–∞–≤–ª—è–µ–º –æ–±—ä–µ–∫—Ç –≤ cargoList
                 cargoList += (cargoList == "" ? "" : ",") + cargoName;
-                PlayerPrefs.SetString("cargoList", cargoList);
-                PlayerPrefs.Save();
-                Debug.Log($"cargoList updated: {cargoList}");
-
-                // –£–Ω–∏—á—Ç–æ–∂–∞–µ–º –æ–±—ä–µ–∫—Ç
                 GameObject.Destroy(other.gameObject);
-                Debug.Log($"Destroyed {other.name}");
             }
-        }
-        else
-        {
-            Debug.Log($"Trigger ignored: Sklad={Sklad}, mesto={mesto}, mestomax={mestomax}");
-        }
 
+            // —Óı‡ÌˇÂÏ Ó·ÌÓ‚ÎÂÌÌ˚È ÒÔËÒÓÍ „ÛÁÓ‚
+            PlayerPrefs.SetString("cargoList", cargoList);
+            PlayerPrefs.Save();
+        }
         if (!Sklad && other.name == "FirstPersonController")
         {
-            Debug.Log("Loading scene 1");
             SceneManager.LoadScene(1);
         }
     }
 
+    // Update is called once per frame
     void Update()
     {
-        // –û–±–Ω–æ–≤–ª—è–µ–º mestomax –∏–∑ PlayerPrefs
-        int newMestomax = PlayerPrefs.GetInt("gruz", mestomax);
-        if (newMestomax != mestomax)
-        {
-            mestomax = newMestomax;
-            Debug.Log($"mestomax updated to: {mestomax}");
-        }
+        mestomax = PlayerPrefs.GetInt("gruz",2); 
 
-        if (mestotext != null)
-        {
-            mestotext.text = mesto.ToString() + "/" + mestomax.ToString();
-        }
+        mestotext.text =mesto.ToString()+"/"+mestomax.ToString();
     }
 }

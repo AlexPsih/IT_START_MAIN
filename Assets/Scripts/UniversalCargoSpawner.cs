@@ -1,36 +1,44 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class UniversalCargoSpawner : MonoBehaviour
 {
+    // Точка спавна (можно задать в инспекторе или найти в сцене)
     public Transform spawnPoint;
 
     void Start()
     {
+        // Если spawnPoint не назначен, используем позицию текущего объекта
         if (spawnPoint == null)
         {
             spawnPoint = transform;
         }
 
+        // Читаем список грузов из PlayerPrefs
         string cargoList = PlayerPrefs.GetString("cargoList", "");
-        Debug.Log($"cargoList received: {cargoList}");
         if (string.IsNullOrEmpty(cargoList))
         {
-            Debug.LogWarning("No cargo to spawn.");
+            Debug.Log("No cargo to spawn.");
             return;
         }
 
+        // Разделяем строку на массив имен бочек
         string[] cargos = cargoList.Split(',');
+
+        // Счётчик для позиционирования
         int index = 0;
 
+        // Спавним каждую бочку
         foreach (string cargoName in cargos)
         {
-            Debug.Log($"Attempting to spawn: {cargoName}");
+            // Загружаем префаб из папки Resources
             GameObject prefab = Resources.Load<GameObject>($"Cargo/{cargoName}");
             if (prefab != null)
             {
+                // Вычисляем позицию с небольшим смещением, чтобы бочки не накладывались
                 Vector3 spawnPosition = spawnPoint.position + new Vector3(index * 1.5f, 0, 0);
-                GameObject spawnedObject = Instantiate(prefab, spawnPosition, Quaternion.identity);
-                Debug.Log($"Spawned {cargoName} at position {spawnPosition} with layer {LayerMask.LayerToName(spawnedObject.layer)}");
+                Instantiate(prefab, spawnPosition, spawnPoint.rotation);
                 index++;
             }
             else
@@ -39,8 +47,8 @@ public class UniversalCargoSpawner : MonoBehaviour
             }
         }
 
+        // Очищаем список грузов после спавна (опционально)
         PlayerPrefs.SetString("cargoList", "");
         PlayerPrefs.Save();
-        Debug.Log("cargoList cleared");
     }
 }
