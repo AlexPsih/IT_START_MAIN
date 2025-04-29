@@ -1,32 +1,37 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System.Collections; // Для работы с корутинами
 
 public class TriggerHUBDoor : MonoBehaviour
 {
     [Header("Настройки")]
     public bool isWarehouse;
-    public int maxCargo = 3;
-    
+
     [Header("Счетчик")]
     public TextMeshPro cargoCounterText;
-    
+
     public int CurrentCargo => PlayerPrefs.GetInt("currentCargo", 0);
     public bool HasCargo => CurrentCargo > 0;
 
     void Start()
     {
-        PlayerPrefs.SetInt("currentCargo", 0); // ОБНУЛЯЕМ груз при старте
+        // Жесткий сброс значений при старте
+        PanelMenu.maxCargo = 2;
+        Sheild.strenght = 15;
+        PlayerPrefs.SetInt("gruz", PanelMenu.maxCargo);
+        PlayerPrefs.SetInt("Sheild", Sheild.strenght);
+        PlayerPrefs.SetInt("currentCargo", 0);
         PlayerPrefs.Save();
+
         UpdateCounter();
-        Debug.Log($"Старт системы. Грузы: {CurrentCargo}, hasCargo: {HasCargo}");
     }
 
-    void UpdateCounter()
+    public void UpdateCounter()
     {
         if (cargoCounterText != null)
         {
-            cargoCounterText.text = $"{CurrentCargo}/{maxCargo}";
+            cargoCounterText.text = $"{CurrentCargo}/{PanelMenu.maxCargo}";
             cargoCounterText.color = HasCargo ? Color.green : Color.red;
         }
     }
@@ -46,51 +51,74 @@ public class TriggerHUBDoor : MonoBehaviour
     void AddCargo(GameObject cargo)
     {
         int newCount = CurrentCargo + 1;
-        if (newCount > maxCargo) return;
+        if (newCount > PanelMenu.maxCargo) return;
 
         PlayerPrefs.SetInt("currentCargo", newCount);
         PlayerPrefs.Save();
 
-        // ✨ Извлекаем имя без (Clone) и записываем в cargoPrefabs
         string cleanName = cargo.name.Replace("(Clone)", "").Trim();
         CargoManager.Instance.AddCargoPrefab(cleanName);
 
         Destroy(cargo);
         UpdateCounter();
-        
-        Debug.Log($"Добавлен груз. Всего: {newCount}, PlayerPrefs: {PlayerPrefs.GetInt("currentCargo")}");
     }
 
     void TryLoadPlanet()
     {
-        Debug.Log($"Попытка загрузки. Текущие значения:\n"
-                + $"PlayerPrefs: {PlayerPrefs.GetInt("currentCargo")}\n"
-                + $"Свойство HasCargo: {HasCargo}\n"
-                + $"cargoPrefabs: {string.Join(", ", CargoManager.Instance.cargoPrefabs)}");
-
         if (HasCargo)
         {
             SceneManager.LoadScene("SampleScene");
         }
         else
         {
-            Debug.LogError($"Критическая ошибка! PlayerPrefs: {PlayerPrefs.GetInt("currentCargo")}, но HasCargo={HasCargo}");
             BlinkDoor();
         }
     }
 
-    void BlinkDoor()
+   void BlinkDoor()
+{
+    // Получаем рендерер двери (предполагаем, что скрипт висит на объекте двери)
+    Renderer doorRenderer = GetComponent<Renderer>();
+    if (doorRenderer == null) return;
+
+    // Запоминаем исходный материал
+    Material originalMaterial = doorRenderer.material;
+    
+    // Создаем материалы из ресурсов
+    Material redMat = Resources.Load<Material>("3d_models/Materials/red");
+    Material greenMat = Resources.Load<Material>("3d_models/Materials/green");
+    
+    if (redMat == null || greenMat == null)
     {
-        // Визуальная индикация ошибки
+        Debug.LogError("Не найдены материалы для анимации!");
+        return;
     }
+
+    // Запускаем корутину для мигания
+    StartCoroutine(BlinkAnimation(doorRenderer, originalMaterial, redMat, greenMat));
+}
+
+IEnumerator BlinkAnimation(Renderer renderer, Material originalMat, Material redMat, Material greenMat)
+{
+    int blinkCount = 6; // Количество миганий
+    float blinkDuration = 0.15f; // Длительность каждого мигания
+    
+    for (int i = 0; i < blinkCount; i++)
+    {
+        // Чередуем красный и зеленый
+        renderer.material = (i % 2 == 0) ? redMat : greenMat;
+        yield return new WaitForSeconds(blinkDuration);
+    }
+    
+    // Возвращаем исходный материал
+    renderer.material = originalMat;
+}
 
     void OnDisable()
     {
-        string sceneName = SceneManager.GetActiveScene().name;
-        if (sceneName.StartsWith("Planet"))
+        if (SceneManager.GetActiveScene().name.StartsWith("Planet"))
         {
             PlayerPrefs.DeleteKey("currentCargo");
-            Debug.Log("PlayerPrefs: currentCargo cleared");
         }
     }
 }

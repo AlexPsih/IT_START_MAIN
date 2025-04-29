@@ -38,11 +38,11 @@ public class TargetPlanetScript : MonoBehaviour
             // Загружаем сцену в зависимости от mission
             switch (planetid)
             {
-                case 0: SceneManager.LoadScene(4); break; // barrel_3_2 → сцена 4
-                case 1: SceneManager.LoadScene(5); break; // barrel_3_1 → сцена 5
-                case 2: SceneManager.LoadScene(3); break; // barrel_1   → сцена 3
-                case 3: SceneManager.LoadScene(2); break; // barrel_2   → сцена 2
-                default: SceneManager.LoadScene(4); break; // На всякий случай
+                case 0: SceneManager.LoadScene(5); break; // barrel_3_2 → сцена 4
+                case 1: SceneManager.LoadScene(6); break; // barrel_3_1 → сцена 5
+                case 2: SceneManager.LoadScene(4); break; // barrel_1   → сцена 3
+                case 3: SceneManager.LoadScene(3); break; // barrel_2   → сцена 2
+                default: SceneManager.LoadScene(5); break; // На всякий случай
             }
         }
     }

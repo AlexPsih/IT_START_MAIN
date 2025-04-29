@@ -1,32 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class MenuInteract : MonoBehaviour, IInteract
+public class MenuInteract : MonoBehaviour, IInteract 
 {
-
     public PanelMenu panel;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public int maxPage = 1;
+    public int minPage = 0;
 
-    // Update is called once per frame
-    void Update()
+    public void Interact() 
     {
-        
-    }
-
-    public void Interact()
-    {
-        if (gameObject.name== "arrowR")
+        if (gameObject.name == "arrowR" && panel.page < maxPage) 
         {
-            panel.page += 1;
+            panel.page++;
+            Debug.Log($"Переключено на страницу {panel.page}");
         }
-        if (gameObject.name == "arrowL")
+        else if (gameObject.name == "arrowL" && panel.page > minPage) 
         {
-            panel.page -= 1;
+            panel.page--;
+            Debug.Log($"Переключено на страницу {panel.page}");
         }
     }
 }

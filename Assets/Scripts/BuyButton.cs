@@ -1,23 +1,39 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class BuyButton : MonoBehaviour, IInteract
+public class BuyButton : MonoBehaviour, IInteract 
 {
     public PanelMenu panel;
-    public void Interact()
+    public TriggerHUBDoor cargoSystem; // Ссылка на систему груза
+
+    public void Interact() 
     {
-        if (panel.page == 0)
+        if (panel.page == 0) 
         {
-            PlayerPrefs.SetInt("Sheild", PlayerPrefs.GetInt("Sheild", 0)+1);
-        }
-        else if (panel.page == 1)
+            if (PanelMenu.credits >= 100 && Sheild.strenght < 22) 
+            {
+                PanelMenu.credits -= 100;
+                Sheild.strenght++;
+                PlayerPrefs.SetInt("Sheild", Sheild.strenght);
+                PlayerPrefs.Save();
+                Debug.Log($"Улучшен щит. Текущий уровень: {Sheild.strenght}");
+            }
+        } 
+        else if (panel.page == 1) 
         {
-            PlayerPrefs.SetInt("manevr", PlayerPrefs.GetInt("manevr", 50) + 35);
-        }
-        else if (panel.page == 2)
-        {
-            PlayerPrefs.SetInt("gruz", PlayerPrefs.GetInt("gruz", 2) + 1);
+            if (PanelMenu.credits >= 500 && PanelMenu.maxCargo < 10) 
+            {
+                PanelMenu.credits -= 500;
+                PanelMenu.maxCargo++;
+                PlayerPrefs.SetInt("gruz", PanelMenu.maxCargo);
+                PlayerPrefs.Save();
+                
+                // Немедленное обновление интерфейса
+                if (cargoSystem != null) 
+                {
+                    cargoSystem.UpdateCounter();
+                }
+                Debug.Log($"Улучшен грузовой отсек. Новый лимит: {PanelMenu.maxCargo}");
+            }
         }
     }
 }
