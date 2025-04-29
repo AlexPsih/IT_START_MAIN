@@ -5,40 +5,44 @@ using UnityEngine.SceneManagement;
 
 public class TargetPlanetScript : MonoBehaviour
 {
-    public int range;
-    int planetid;
-    public GameObject[] planet;
+    public int range; // Диапазон, в котором может появиться планета
+    public GameObject[] planet; // Массив префабов планет (должен быть заполнен в Unity)
+
     void Start()
     {
-        transform.position = new Vector3(Random.RandomRange(-range, range), Random.RandomRange(-range, range), Random.RandomRange(-range, range) * 0f);
-        planet[Random.RandomRange(0,planet.Length)].SetActive(true);
+        // 1. Загружаем номер миссии из сохранённых данных (0 по умолчанию)
+        int planetid = PlayerPrefs.GetInt("mission", 0);
+
+        // 2. Размещаем планету в случайной позиции в пределах range
+        transform.position = new Vector3(
+            Random.Range(-range, range), 
+            Random.Range(-range, range), 
+            0f // Z = 0, чтобы планета была на 2D-экране
+        );
+
+        // 3. Активируем только одну планету, соответствующую mission
+        for (int i = 0; i < planet.Length; i++)
+        {
+            planet[i].SetActive(i == planetid); // Включаем только нужную
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    // При столкновении с игроком
     private void OnTriggerEnter(Collider other)
     {
-        if (other.name=="player")
+        if (other.name == "player")
         {
-            if (planetid==0)
+            // Получаем текущий mission (тип доставленной бочки)
+            int planetid = PlayerPrefs.GetInt("mission", 0);
+
+            // Загружаем сцену в зависимости от mission
+            switch (planetid)
             {
-                SceneManager.LoadScene(4);
-            }
-            if (planetid == 1)
-            {
-                SceneManager.LoadScene(5);
-            }
-            if (planetid == 2)
-            {
-                SceneManager.LoadScene(3);
-            }
-            if (planetid == 3)
-            {
-                SceneManager.LoadScene(2);
+                case 0: SceneManager.LoadScene(4); break; // barrel_3_2 → сцена 4
+                case 1: SceneManager.LoadScene(5); break; // barrel_3_1 → сцена 5
+                case 2: SceneManager.LoadScene(3); break; // barrel_1   → сцена 3
+                case 3: SceneManager.LoadScene(2); break; // barrel_2   → сцена 2
+                default: SceneManager.LoadScene(4); break; // На всякий случай
             }
         }
     }

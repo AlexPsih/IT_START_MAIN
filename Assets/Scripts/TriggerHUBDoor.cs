@@ -1,72 +1,96 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 
 public class TriggerHUBDoor : MonoBehaviour
 {
-    public bool Sklad;
-    public int mesto;
-    public int mestomax=1;
-    public TextMeshPro mestotext;
+    [Header("–ù–∞—Å—Ç—Ä–æ–π–∫–∏")]
+    public bool isWarehouse;
+    public int maxCargo = 3;
+    
+    [Header("–°—á–µ—Ç—á–∏–∫")]
+    public TextMeshPro cargoCounterText;
+    
+    public int CurrentCargo => PlayerPrefs.GetInt("currentCargo", 0);
+    public bool HasCargo => CurrentCargo > 0;
+
     void Start()
     {
+        PlayerPrefs.SetInt("currentCargo", 0); // –û–ë–ù–£–õ–Ø–ï–ú –≥—Ä—É–∑ –ø—Ä–∏ —Å—Ç–∞—Ä—Ç–µ
+        PlayerPrefs.Save();
+        UpdateCounter();
+        Debug.Log($"–°—Ç–∞—Ä—Ç —Å–∏—Å—Ç–µ–º—ã. –ì—Ä—É–∑—ã: {CurrentCargo}, hasCargo: {HasCargo}");
+    }
+
+    void UpdateCounter()
+    {
+        if (cargoCounterText != null)
+        {
+            cargoCounterText.text = $"{CurrentCargo}/{maxCargo}";
+            cargoCounterText.color = HasCargo ? Color.green : Color.red;
+        }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (isWarehouse && other.CompareTag("Cargo"))
+        {
+            AddCargo(other.gameObject);
+        }
+        else if (!isWarehouse && other.CompareTag("Player"))
+        {
+            TryLoadPlanet();
+        }
+    }
+
+    void AddCargo(GameObject cargo)
+    {
+        int newCount = CurrentCargo + 1;
+        if (newCount > maxCargo) return;
+
+        PlayerPrefs.SetInt("currentCargo", newCount);
+        PlayerPrefs.Save();
+
+        // ‚ú® –ò–∑–≤–ª–µ–∫–∞–µ–º –∏–º—è –±–µ–∑ (Clone) –∏ –∑–∞–ø–∏—Å—ã–≤–∞–µ–º –≤ cargoPrefabs
+        string cleanName = cargo.name.Replace("(Clone)", "").Trim();
+        CargoManager.Instance.AddCargoPrefab(cleanName);
+
+        Destroy(cargo);
+        UpdateCounter();
         
+        Debug.Log($"–î–æ–±–∞–≤–ª–µ–Ω –≥—Ä—É–∑. –í—Å–µ–≥–æ: {newCount}, PlayerPrefs: {PlayerPrefs.GetInt("currentCargo")}");
     }
 
-    private void OnTriggerEnter(Collider other)
+    void TryLoadPlanet()
     {
-        if (Sklad && mesto < mestomax)
+        Debug.Log($"–ü–æ–ø—ã—Ç–∫–∞ –∑–∞–≥—Ä—É–∑–∫–∏. –¢–µ–∫—É—â–∏–µ –∑–Ω–∞—á–µ–Ω–∏—è:\n"
+                + $"PlayerPrefs: {PlayerPrefs.GetInt("currentCargo")}\n"
+                + $"–°–≤–æ–π—Å—Ç–≤–æ HasCargo: {HasCargo}\n"
+                + $"cargoPrefabs: {string.Join(", ", CargoManager.Instance.cargoPrefabs)}");
+
+        if (HasCargo)
         {
-            mesto += 1;
-            // œÓÎÛ˜‡ÂÏ ÚÂÍÛ˘ËÈ ÒÔËÒÓÍ „ÛÁÓ‚ ËÁ PlayerPrefs ËÎË ÒÓÁ‰‡ÂÏ ÔÛÒÚÓÈ
-            string cargoList = PlayerPrefs.GetString("cargoList", "");
-            // ”·Ë‡ÂÏ ÒÛÙÙËÍÒ (Clone) ËÁ ËÏÂÌË Ó·˙ÂÍÚ‡
-            string cargoName = other.name.Replace("(Clone)", "");
-
-            if (other.name == "barrel_3_2(Clone)")
-            {
-                PlayerPrefs.SetInt("mission", 0);
-                print("ÃËÒÒËˇ Ì‡ ‚ÂÏˇ");
-                cargoList += (cargoList == "" ? "" : ",") + cargoName;
-                GameObject.Destroy(other.gameObject);
-            }
-            if (other.name == "barrel_3_1(Clone)")
-            {
-                PlayerPrefs.SetInt("mission", 1);
-                print("ÃËÒÒËˇ Ò ÔË‡Ú‡ÏË");
-                cargoList += (cargoList == "" ? "" : ",") + cargoName;
-                GameObject.Destroy(other.gameObject);
-            }
-            if (other.name == "barrel_1(Clone)")
-            {
-                PlayerPrefs.SetInt("mission", 2);
-                cargoList += (cargoList == "" ? "" : ",") + cargoName;
-                GameObject.Destroy(other.gameObject);
-            }
-            if (other.name == "barrel_2(Clone)")
-            {
-                PlayerPrefs.SetInt("mission", 3);
-                cargoList += (cargoList == "" ? "" : ",") + cargoName;
-                GameObject.Destroy(other.gameObject);
-            }
-
-            // —Óı‡ÌˇÂÏ Ó·ÌÓ‚ÎÂÌÌ˚È ÒÔËÒÓÍ „ÛÁÓ‚
-            PlayerPrefs.SetString("cargoList", cargoList);
-            PlayerPrefs.Save();
+            SceneManager.LoadScene("SampleScene");
         }
-        if (!Sklad && other.name == "FirstPersonController")
+        else
         {
-            SceneManager.LoadScene(1);
+            Debug.LogError($"–ö—Ä–∏—Ç–∏—á–µ—Å–∫–∞—è –æ—à–∏–±–∫–∞! PlayerPrefs: {PlayerPrefs.GetInt("currentCargo")}, –Ω–æ HasCargo={HasCargo}");
+            BlinkDoor();
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    void BlinkDoor()
     {
-        mestomax = PlayerPrefs.GetInt("gruz",2); 
+        // –í–∏–∑—É–∞–ª—å–Ω–∞—è –∏–Ω–¥–∏–∫–∞—Ü–∏—è –æ—à–∏–±–∫–∏
+    }
 
-        mestotext.text =mesto.ToString()+"/"+mestomax.ToString();
+    void OnDisable()
+    {
+        string sceneName = SceneManager.GetActiveScene().name;
+        if (sceneName.StartsWith("Planet"))
+        {
+            PlayerPrefs.DeleteKey("currentCargo");
+            Debug.Log("PlayerPrefs: currentCargo cleared");
+        }
     }
 }
