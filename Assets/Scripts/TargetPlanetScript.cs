@@ -7,18 +7,22 @@ public class TargetPlanetScript : MonoBehaviour
 {
     public int range; // Диапазон, в котором может появиться планета
     public GameObject[] planet; // Массив префабов планет (должен быть заполнен в Unity)
-
+    public bool stay=true;
     void Start()
     {
         // 1. Загружаем номер миссии из сохранённых данных (0 по умолчанию)
-        int planetid = PlayerPrefs.GetInt("mission", 0);
+        int planetid = Random.RandomRange(0,planet.Length);
 
         // 2. Размещаем планету в случайной позиции в пределах range
-        transform.position = new Vector3(
-            Random.Range(-range, range), 
-            Random.Range(-range, range), 
-            0f // Z = 0, чтобы планета была на 2D-экране
-        );
+        if (stay) 
+        {
+            planetid = PlayerPrefs.GetInt("mission", 0);
+            transform.position = new Vector3(
+                Random.Range(-range, range),
+                Random.Range(-range, range),
+                0f // Z = 0, чтобы планета была на 2D-экране
+            );
+        }
 
         // 3. Активируем только одну планету, соответствующую mission
         for (int i = 0; i < planet.Length; i++)
